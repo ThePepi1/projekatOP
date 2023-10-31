@@ -16,11 +16,20 @@ class Korisnik:
         file.write(script)
         file.close()
     def EditProfile(self):
-       #TO DO smisliti kako da pitam korisnika sta zeli da promeni i OPCIJE 1. Za svako ga pitati odvojeno, PItati ga da odjednom unese sta zeli da promeni, 
-       # Da li zeli da promeni jednu ili vise stavki i koje su to stavke 
+        input1 = input("Unesi sifru koju hoces da koristis ukoliko ne zelis da promenis sifru pritisnite enter ")
+        while input1 != "" and ValidatePass(input1):
+              input1 = input("Unesi sifru koju hoces da koristis ukoliko ne zelis da promenis sifru pritisnite enter ")
+        if input1 != "":
+            self.password = input1
+        input1 = input("Unesi ime ukoliko ne zelis da ga promenis pritisni enter ")
+        if input1 != "":
+            self.name = input1
+        input1 = input("Unesi prezime ukoliko ne zelis da ga promenis pritisni enter ")
+        if input1 != "":
+            self.lastname = input1
         file = open("users.txt","r")
         Textlist = file.read().split("\n")
-        Textlist[self.row-1] = f"{self.row}|{self.username}|{self.password}|{}|{}|{self.type}"
+        Textlist[self.row-1] = f"{self.row}|{self.username}|{self.password}|{self.name}|{self.lastname}|{self.type}"
         file.close()
         file = open("users.txt","w")
         file.write("")
@@ -30,10 +39,13 @@ class Korisnik:
             if Line != "":
                 file.write(Line+"\n")
         file.close()
+        return self
 #To DO razdvoji klase u posebne fajlove mnogo ce da bude sve u isto
 class Manager(Korisnik):
     def CreateSeller():
         Register(2)
+    def CreateManager():
+        Register(3)
 class Seller(Korisnik):
     pass
 

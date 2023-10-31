@@ -1,0 +1,7 @@
+a = "sgknandfknfsdklfn,fndsfsyo sdf'l,dsf.ds,f.ds,fgs.d,fds.,fdsfs"
+b = "dfklmasfmadfdmasmdfmafmfa"
+c = "sdgknadfknnadfn"
+d = "asfmkasmnfas;knfasnd"
+string = '{:^110}'
+print(string.format(a),string.format(b))
+print(string.format(c),string.format(d))

@@ -1,22 +1,22 @@
 import Korisnik
-logedIn = False
-script = "Ukoliko zeliteta da izadjete ukucajte: Exit\nUkoliko zelite da se Prijavite ukucajte prijava"
-scriptNeReg = "Ukoliko zelite da se registrujete ukucajte registruj"
-scriptloged = "Ukoliko zelite da se odjavite ukucajte odjava\nUkoliko zelite da promenite podatke ukucajte izmeni podatke"
+if_loged = False
+menu = "Ukoliko zeliteta da izadjete ukucajte: Exit\nUkoliko zelite da se Prijavite ukucajte prijava"
+menu_not_loged = "Ukoliko zelite da se registrujete ukucajte registruj"
+menu_loged = "Ukoliko zelite da se odjavite ukucajte odjava\nUkoliko zelite da promenite podatke ukucajte izmeni podatke"
 if __name__ == "__main__":
-    input1 = ""
-    while input1 != "Exit":
-        print(script)
-        if not logedIn:
-            print(scriptNeReg)
-        if logedIn:
-            print(scriptloged)
-        input1 = input()
-        if input1 == "Exit":
+    user_input = ""
+    while user_input != "Exit":
+        print(menu)
+        if not if_loged:
+            print(menu_not_loged)
+        if if_loged:
+            print(menu_loged)
+        user_input = input()
+        if user_input == "Exit":
             break
         exit = False
-        if input1 == "prijava" and not logedIn:
-            while logedIn== False:
+        if user_input == "prijava":
+            while if_loged== False:
                 Username = input("Unesi korisnicko ime ")
                 Password = input("Unesi lozinku ")
                 loged = Korisnik.Login(Username, Password)
@@ -26,15 +26,15 @@ if __name__ == "__main__":
                         break
                     continue
                 else: 
-                    logedIn = True
+                    if_loged = True
             continue
-        if input1 == "registruj" and not logedIn:
+        if user_input == "registruj" and not if_loged:
             Korisnik.Register()
             continue
-        if input1 == "odjava":
+        if user_input == "odjava":
             loged = ""
-            logedIn = False    
+            if_loged = False    
             continue
-        if input1 == "izmeni podatke":
-            loged.EditProfile()
+        if user_input == "izmeni podatke":
+            loged = loged.EditProfile()
         print("Nepostojeca naredba")
