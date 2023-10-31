@@ -1,0 +1,4 @@
+Da li mogu da zabranim koriscenje odredjenog znaka
+Kako postaviti pitanje sta zelimo da menjamo
+Kako funkcionise prijava Da li mogu vise korisnika istovremeno da budu prijavljeni. Ako da kako se onda menja izmedju korisnika i kako se to naglasava... 
+Mogu li ja bez liste samo sa empty fajlom da cuvam sve ovo(Mnogo promena)
