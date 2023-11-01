@@ -1,3 +1,4 @@
+import PrintTabel 
 types_of_movies = ["Horro", "Action", "Adventure", "Romance", "Comedy"]
 class Film:
     def __init__(self, name, type, length, director, roles, countyr_of_origin,year,Description):
@@ -17,22 +18,20 @@ def print_movies():
     movies_for_print = []
     max_size = [0,0,0,0,0,0,0,0]
     for line in file:
+        line = line[:-1]
         movie =  line.split("|") 
         movies_for_print.append(movie)
-        i = 0 
+        i = 0
         for thing in movie:        
             if len(thing) > max_size[i]:
                 max_size[i] = len(thing)
             i+= 1 
-
+    PrintTabel.PrintTabel_start_end(max_size)
     for movie in movies_for_print:
-        printTabel(movie,max_size)
+        PrintTabel.PrintTabel_row(movie,max_size,8)
+    PrintTabel.PrintTabel_start_end(max_size)
     file.close()
-def printTabel(movie, sizes): 
-    for i in range(8):
-        form = "{:^" + str(sizes[i]) +  "}"
-        print(form.format(movie[i]),end="|")
-    print()
+
     
 
 print_movies()
