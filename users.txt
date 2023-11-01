@@ -1,5 +1,0 @@
-1|Petar004|Petar2004|Petar|Popovic|1
-2|Petar22414|Proba1345|Petar|Pavlovic|1
-3|ZoranB12|Zoranb23|Zoran|Bib|1
-4|Pepi004|Petar2004|Petar|Popovic|1
-5|Petar241|Proba123456|Petar|POPO|1

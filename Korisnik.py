@@ -17,14 +17,18 @@ class Korisnik:
         file.close()
     def EditProfile(self):
         input1 = input("Unesi sifru koju hoces da koristis ukoliko ne zelis da promenis sifru pritisnite enter ")
-        while input1 != "" and ValidatePass(input1):
+        while input1 != "" and not ValidatePass(input1):
               input1 = input("Unesi sifru koju hoces da koristis ukoliko ne zelis da promenis sifru pritisnite enter ")
         if input1 != "":
             self.password = input1
         input1 = input("Unesi ime ukoliko ne zelis da ga promenis pritisni enter ")
+        while "|" in input1:
+            input1 = input("Ime ne sme da sadrzi znak |. Pokusaj ponovo ")
         if input1 != "":
             self.name = input1
         input1 = input("Unesi prezime ukoliko ne zelis da ga promenis pritisni enter ")
+        while "|" in input1:
+            input1 = input("Prezime ne sme da sadrzi znak |. Pokusaj ponovo? ")
         if input1 != "":
             self.lastname = input1
         file = open("users.txt","r")
