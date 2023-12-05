@@ -5,8 +5,7 @@ class Sala:
         self.hall_number_row = hall_number_row
         self.hall_signe_site = hall_signe_site
         
-Halls = []
-
+Halls = {}
 def validate_name(name):
     if name == "":
         return False

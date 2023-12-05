@@ -6,64 +6,20 @@ class Korisnik:
         self.name = name
         self.lastname = lastname
         self.type = type
-    def edit_profile(self):
-        while True:
-            print("Ukoliko zelite da promenite sifru ukucajte 1")
-            print("Ukoliko zelite da promenite ime ukucajte 2")
-            print("Ukoliko zelite da promenite prezime ukucajte 3")
-            print("Ukolko odustajete ukucajte X")
-            user_input = input()
-            if user_input == "1":
-                password = ""
-                while True:
-                    password = input("Unesi lozinku koja ima vise od 6 karaktera i mora sadrzati makar jedan bro, ukoliko ne zelite to da promenite ukucajte X ")
-                    if password == "X":
-                       users[self.row - 1] = self
-                       return self
-                    if validate_pass(password):
-                        break
-                self.password = password
-            elif user_input == "2":
-                name =""
-                while True:
-                    name = input("Unesite vase ime bez znaka |, ukoliko ne zelite to da promenite X ")
-                    if name == "X":
-                       users[self.row - 1] = self
-                       return self
-                    if check_every_input(name):
-                        break   
-                self.name = name 
-            elif user_input == "3":
-                lastname = ""
-                while True:
-                    lastname = input("Unesite vase prezime bez znaka |, ukoliko ne zelite to da promenite ukucajte X ")
-                    if lastname == "X":
-                       users[self.row - 1] = self
-                       return self
-                    if check_every_input(lastname):
-                        break    
-                self.lastname = lastname
-            elif user_input == "X":
-                break
-            else:
-                print("Uneli ste ne postojecu naredbu")
-        users[self.row - 1] = self
-        
-        return self
+    def set_password (self, paswword):
+        self.password = paswword
+    def set_name (self, name):
+        self.name = name
+    def set_lastname (self, lastname):
+        self.lastname = lastname
     def to_string(self):
         return f"{self.row}|{self.username}|{self.password}|{self.name}|{self.lastname}|{self.type}\n"    
-    def create_seller(self):
-        if self.type == 3:
-            register(2)
-    def create_manager(self):
-        if self.type == 3:
-            register(3)
-
+def create_seller():
+        register(2)
+def create_manager():
+        register(3)
 
 users = []
-
-
-
 
 def login(username, password):
     for user in users:
@@ -71,9 +27,9 @@ def login(username, password):
             if password == user.password:
                 return user
             else:
-                print("Pogresna lozinka pokusaj ponovo")
+                print("Ne poklapaju se korisnicko ime i lozinka")
                 return  
-    print("Nepostojece korisnicko ime")
+    print("Ne poklapaju se korisnicko ime i lozinka")
     return 
 def check_every_input(text):
     if "|" in text:
@@ -83,13 +39,6 @@ def check_every_input(text):
         print("Unos ne sme da bude prazan")
         return False
     return True
-
-
-
-
-
-
-
 def validate_pass(password):
         if len(password) < 6:
             print("Sifra mora da sadrzi vise od 6 karaktera, Pokusaj ponovo")
@@ -127,7 +76,7 @@ def register(Type = 1):
             break
     name =""
     while True:
-        name = input("Unesite vase ime bez znaka |")
+        name = input("Unesite vase ime bez znaka | ")
         if name == "X":
             return
         if check_every_input(name):
@@ -135,7 +84,7 @@ def register(Type = 1):
     
     lastname = ""
     while True:
-        lastname = input("Unesite vase prezime bez znaka |")
+        lastname = input("Unesite vase prezime bez znaka | ")
         if lastname == "X":
             return 
         if check_every_input(lastname):
@@ -150,6 +99,54 @@ def register(Type = 1):
         user = Korisnik(username, password, name, lastname,type= Type)
     users.append(user)
 
+
+def edit_profile(user):
+    name = ""
+    lastname = ""
+    password = ""
+    while True:
+        print("Ukoliko zelite da promenite sifru ukucajte 1")
+        print("Ukoliko zelite da promenite ime ukucajte 2")
+        print("Ukoliko zelite da promenite prezime ukucajte 3")
+        print("Ukolko odustajete ukucajte X")
+        user_input = input()
+        if user_input == "1":
+                password = ""
+                while True:
+                    password = input("Unesi lozinku koja ima vise od 6 karaktera i mora sadrzati makar jedan bro, ukoliko ne zelite to da promenite ukucajte X ")
+                    if password == "X":
+                        break
+                    if validate_pass(password):
+                        break
+        elif user_input == "2":
+                name =""
+                while True:
+                    name = input("Unesite vase ime bez znaka |, ukoliko ne zelite to da promenite X ")
+                    if name == "X":
+                        break
+                    if check_every_input(name):
+                        break   
+        elif user_input == "3":
+                lastname = ""
+                while True:
+                    lastname = input("Unesite vase prezime bez znaka |, ukoliko ne zelite to da promenite ukucajte X ")
+                    if lastname == "X":
+                       break
+                    if check_every_input(lastname):
+                        break    
+        elif user_input == "X":
+                break
+        
+    
+    if(password != "" and password != "X"):
+        user.set_password(password)
+    if(name != "" and name != "X"):
+        user.set_name(name)
+    if(lastname != "" and lastname != "X"):
+        user.set_lastname(lastname)
+    users[user.row - 1] = user 
+    save()
+    return user
 def load():
     file = open("users.txt","r",encoding="utf-8")
     for line in file:

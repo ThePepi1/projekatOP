@@ -16,9 +16,6 @@ def login():
             return True, loged
 
 
-
-
-
 if __name__ == "__main__":
     if_loged = False
     user_input = ""
@@ -47,7 +44,7 @@ if __name__ == "__main__":
             if_loged = False    
             continue
         elif user_input == "izmeni podatke" and if_loged:
-            user = user.edit_profile()
+            Korisnik.edit_profile(user)
             Korisnik.save()
         elif user_input == "pregled filma":
             Film.print_movies()
@@ -57,9 +54,9 @@ if __name__ == "__main__":
             print("Unesite brojeve koje zelite da pretrazite razdvojene razmakom")
             Film.pretraga_filmova()
         elif user_input == "registruj menadzera" and if_loged == True and user.type == 3:
-            user.create_manager() 
+            Korisnik.create_manager() 
         elif user_input == "registruj prodavca" and if_loged == True and user.type == 3:
-            user.create_seller()   
+            Korisnik.create_seller()   
         else:
             print("Nepostojeca naredba")
 
