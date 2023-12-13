@@ -1,0 +1,2 @@
+A1|Velika sala|10|2|True
+A2|Mala Sala|5|12|True

@@ -148,7 +148,7 @@ def edit_profile(user):
     save()
     return user
 def load():
-    file = open("users.txt","r",encoding="utf-8")
+    file = open("data\\users.txt","r",encoding="utf-8")
     for line in file:
         if line != "":
             line = line[:-1]
@@ -156,10 +156,10 @@ def load():
             users.append(Korisnik(line[1],line[2],line[3],line[4],int(line[0]),int(line[5])))
     file.close() 
 def save():
-    file = open("users.txt","w",encoding="utf-8")
+    file = open("data\\users.txt","w",encoding="utf-8")
     file.write("")
     file.close()
-    file = open("users.txt","a",encoding="utf-8")
+    file = open("data\\users.txt","a",encoding="utf-8")
     for user in users:
         file.write(user.to_string())
     file.close()

@@ -1,6 +1,7 @@
 import Korisnik
 import Film
-# TODO rewrite main (make it cleaner and easyer to read use functions to create menus, probavbly another file)
+import Menu
+# TODO rewrite main use dictenery : for all I need (make it cleaner and easyer to read use functions to create menus, probavbly another file)
 menu = "Ukoliko zeliteta da izadjete ukucajte: Exit\nUkoliko zelite da vidite sve dostupne filmove unesite pregled filma\nUkoliko zelite da pretrazite filmove po jednoj stavci ukucajte pretraga filmova 1\nUkoliko zelite da pretrazite filmove po vise stavaka ukucajte pretraga filmova 2"
 menu_not_loged = "Ukoliko zelite da se Prijavite ukucajte prijava\nUkoliko zelite da se registrujete ukucajte registruj"
 menu_loged = "Ukoliko zelite da se odjavite ukucajte odjava\nUkoliko zelite da promenite podatke ukucajte izmeni podatke"
@@ -20,8 +21,7 @@ if __name__ == "__main__":
     if_loged = False
     user_input = ""
     user = None
-    Korisnik.load()
-    Film.load()
+    Menu.start()
     while True:
         print(menu)
         if not if_loged:
