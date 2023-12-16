@@ -1,4 +1,5 @@
-import PrintTabel 
+import modules.PrintTabel as PrintTabel 
+from modules.bioskoska_projekcija import effect
 types_of_movies = ["Horor", "Action", "Adventure", "Romance", "Comedy"]
 class Movie:
     def __init__(self,id, name, type, length, director, roles, countyr_of_origin,year,description,active):
@@ -19,26 +20,34 @@ class Movie:
     def equal(self,movie):
         print(movie.to_string(),self.to_string())
         return self.name == movie.name and self.type == movie.type and movie.lenght == self.lenght and movie.roles == self.roles and movie.year == self.year
+    def set_name(self, name):
+        self.name =   name
+    def set_type(self, type): 
+        self.type = type
+    def set_director(self, director): 
+        self.director = director
+    def set_roles(self, roles): 
+        self.roles = roles
+    def set_country(self, coutrys_of_origins): 
+        self.country_of_origin = coutrys_of_origins
+    def set_year(self, year): 
+        self.year = year
+    def set_description(self, description): 
+        self.description = description
+
+
+
 
 
 movies = {}
 
-def print_movies(movie_names = "", type = "", max_lenght="", min_lenght="", directors="", roles = "", year_of_recording = "", coutrys_of_origins = "",print = True): 
+def print_movies(movie_names = "", type = "", max_lenght="", min_lenght="", directors="", roles = "", year_of_recording = "", coutrys_of_origins = "",printing = True): 
     movies_for_print = []
-    max_size = [0,0,0,0,0,0,0,0,0]
     for movie in movies.values():
         if(check_movie(movie,movie_names, type, max_lenght, min_lenght, directors, roles , year_of_recording, coutrys_of_origins) and movie.active): 
             movies_for_print.append(movie.to_list())
-            i = 0
-            for thing in movie.to_list():        
-                if len(thing) > max_size[i]:
-                    max_size[i] = len(thing)
-                i+= 1 
-    if print:           
-        PrintTabel.print_tabel_start_end(max_size)
-        for movie in movies_for_print:
-            PrintTabel.print_tabel_row(movie,max_size)
-        PrintTabel.print_tabel_start_end(max_size)
+    if printing:           
+        PrintTabel.preper_to_print(movies_for_print)
     else:
         return movies_for_print
 def check_movie(movie, movie_names = "", type = "", max_lenght="", min_lenght="", directors="", roles = "", year_of_recording = "", coutrys_of_origins = ""):
@@ -88,10 +97,18 @@ def validate_input(input):
     if input == "":
         return False
     if "|" in input:
+        print("Ne sme da sadrzi |")
         return False
     return True
 def validate_type(types):
-    return all(type in types_of_movies for type in types.split(", "))
+    if all(type in types_of_movies for type in types.split(", ")):
+        return True
+    else:
+        print("Postojeci zanrovi su: ")
+        for type_of_movie in types_of_movies:
+            print(type_of_movie, end= " ")
+        print("")
+        return False
 def validate_number(lenght):
     return lenght.isdigit()
 def validate_roles(roles):
@@ -162,15 +179,11 @@ def add_movie():
     print("Ukoliko zelite da prekinete ukucajte X u bilo kom trenutku, nijedan unos ne sme da zadrzi znak |")
     name = ""
     while not validate_input(name):
-        name = input("Unesi ime fulma ")   
+        name = input("Unesi ime filma ")   
         if name == "X":
             return 
     type = ""
     while not validate_type(type):
-        print("Postojeci zanrovi su: ")
-        for type_of_movie in types_of_movies:
-            print(type_of_movie, end= " ")
-        print("")
         type = input("Unesi zanr filma od postojecih zanrova ukoliko postoje vise razdvojite ih zarezom i razmakom ")
         if name == "X":
             return 
@@ -222,6 +235,44 @@ def delete():
         if user_input == "X":
             return 
     movies[user_input].active = False
-#To Do izmena odredjenog dela filma(sve sem id)
-load()
-print_movies()
+    effect(movies[user_input])
+def edit_movie():
+    print_movies()
+    user_input = ""
+    while user_input not in movies.keys():
+        user_input = input("Unesi id filma kome zelis da izmenis ukoliko zelite da prekinete ukucajte X ")
+        if user_input == "X":
+            return
+    id = user_input
+    movie = movies[id]
+    checker = {"1": validate_input, "2": validate_type,  "3": validate_input, "4": validate_roles, "5": validate_number, "6": validate_input, "7": validate_input}
+    updater = {"1": movie.set_name, "2": movie.set_type, "3": movie.set_director, "4": movie.set_roles, "5": movie.set_year, "6": movie.set_country, "7": movie.set_description}
+
+    user_input = ""
+    while True:
+        print("Izaberi sta zelis da izmenis filmu")
+        print("Ukoliko zelite da izmenite filmove po imenu ukucajte 1")
+        print("Ukoliko zelite da izmenite filmove po zanru ukucajte 2")
+        print("Ukoliko zelite da izmenite filmove po direktorima ukucajte 3")
+        print("Ukoliko zelite da izmenite filmove po glavnim ulogama ukucajte 4")
+        print("Ukoliko zelite da izmenite filmove po godini ukucajte 5")
+        print("Ukoliko zelite da izmenite filmove po zemlji porekla ukucajte 6")
+        print("Ukoliko zelite da izmenite deskripciju filma ukucajte 7")
+        print("Za kraj ukucajte X")
+        user_input = input("Unesite zeljenu naredbu ")
+        if user_input == "X":
+            break
+        if user_input in checker.keys():
+            input_user = ""
+            while not checker[user_input](input_user):
+                input_user = input("Unesi podatak kojim ces da izmenis ukoliko si odusta ukucaj X ")
+                if input_user == "X":
+                    break
+            if input_user == "X":
+                continue                
+            updater[user_input](input_user)
+        else:
+            print("nepostojeca naredba")
+    movies[str(movie.id)] = movie
+
+

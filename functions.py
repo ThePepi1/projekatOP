@@ -1,0 +1,1 @@
+#move all functions to it (lets menu be just menus)

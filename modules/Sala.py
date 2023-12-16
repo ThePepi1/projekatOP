@@ -1,4 +1,4 @@
-import PrintTabel
+import modules.PrintTabel as PrintTabel
 class Sala:
     def __init__(self, hall_code,hall_name, hall_number_row, hall_signe_seat,active):
         self.hall_code = hall_code
@@ -96,18 +96,9 @@ def save():
     file.close()
 def print_halls():
     halls_for_print = []
-    max_size = [0,0,0,0]
     for hall in halls.values():
         if hall.active:
             halls_for_print.append(hall.to_list())
-            i = 0      
-            for thing in hall.to_list():
-                max_size[i] = max(max_size[i],len(thing))
-                i = i + 1
-    PrintTabel.print_tabel_start_end(max_size)
-    for hall in halls_for_print:
-            PrintTabel.print_tabel_row(hall,max_size)
-    PrintTabel.print_tabel_start_end(max_size)      
-#brisanje
-#izmenu podataka
+    PrintTabel.preper_to_print(halls_for_print)
+
 #poruke klijentu
