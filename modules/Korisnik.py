@@ -1,3 +1,4 @@
+import modules.PrintTabel as PrintTabel
 class Korisnik:
     def __init__(self,username,password,name,lastname,row = 1, type = 1):
         self.row = row
@@ -14,6 +15,8 @@ class Korisnik:
         self.lastname = lastname
     def to_string(self):
         return f"{self.row}|{self.username}|{self.password}|{self.name}|{self.lastname}|{self.type}\n"    
+    def to_list(self):
+        return [self.username, self.name, self.lastname]
 def create_seller():
         register(2)
 def create_manager():
@@ -98,8 +101,6 @@ def register(Type = 1):
     else :
         user = Korisnik(username, password, name, lastname,type= Type)
     users.append(user)
-
-
 def edit_profile(user):
     name = ""
     lastname = ""
@@ -163,3 +164,19 @@ def save():
     for user in users:
         file.write(user.to_string())
     file.close()
+def get_by_username(username):
+    if username == "None":
+        return None
+    for user in users:
+        if user.username == username:
+            return user
+    return username
+def print_all_users():
+    data_for_print = []
+    list_of_usernames = []
+    for user in users:
+        if user.type == 1:
+            data_for_print.append(user.to_list())
+            list_of_usernames.append(user.username)
+    PrintTabel.prepare_for_printing(data_for_print)
+    return list_of_usernames

@@ -10,7 +10,7 @@ def print_tabel_start_end(sizes):
     for size in sizes:
         print("+"+ "-"*(size), end="")
     print("+")
-def preper_to_print(things_for_prints):
+def prepare_for_printing(things_for_prints):
     max_size = []
     if things_for_prints == []:
         print("Ne postoji takva stvar")

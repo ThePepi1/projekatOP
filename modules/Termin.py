@@ -2,6 +2,7 @@ import modules.bioskoska_projekcija as bioskoska_projekcija
 import datetime
 from random import randrange
 import modules.PrintTabel as PrintTabel
+from modules.cards import effect_on_change
 dates = ["pon","uto","sre","cet","pet","sub","ned"]
 class Term:
     def __init__(self,code,date,active):
@@ -13,6 +14,13 @@ class Term:
         return f"{self.code}|{self.date}|{self.active}\n"
     def to_list(self):
         return [self.code, self.projection.hall.hall_code,self.projection.movie.name,self.date.strftime('%Y-%m-%d'),self.projection.start_time.strftime('%H:%M:%S'),self.projection.end_time.strftime('%H:%M:%S')]
+    def start_time(self):
+        return datetime.datetime.combine(self.date,self.projection.start_time.time())
+    def end_time(self):
+        return datetime.datetime.combine(self.date,self.projection.start_time.time())
+
+
+
 
 terms = {}
 def check_existence(code, day):
@@ -87,8 +95,18 @@ def effection(projection):
         if term.projection.code == projection.code and term.active:
             terms_for_delete.append(term.code)
     for code in terms_for_delete:
+        effect_on_change(terms[code])
         terms.pop(code)
-
+        
+def effection_change_code(projection,code):
+    for term in terms.values():
+        if not term.active:
+            if term.projection.code == code:
+                firs_letter = term.code[-1]
+                second_letter = term.code[-2]
+                code = projection.code + firs_letter +  second_letter
+                term.code = code
+                term.projection = projection
 def search_terms():
     print("Ukoliko hocete da pretrazite termine po filmu ukucajte 1")
     print("Ukoliko hocete da pretrazite termine po sali ukucajte 2")
@@ -120,6 +138,9 @@ def search_terms():
         while not bioskoska_projekcija.validate_time(end_time):
             end_time = input("Unesi datum za koje zelite da pretrazite ")
         end_time = datetime.datetime.strptime(end_time,'%H:%M:%S')
+    print_terms(movies,halls,date,start_time,end_time)
+
+def print_terms(movies = [], halls = "", date = "", start_time = "", end_time = ""): 
     terms_for_print = []
     for term in terms.values():
         if term.active:
@@ -139,8 +160,18 @@ def search_terms():
                 if not end_time == term.projection.end_time:
                     continue
             terms_for_print.append(term.to_list())
-    
-    PrintTabel.preper_to_print(terms_for_print)
+            
+    PrintTabel.prepare_for_printing(terms_for_print)
 
-# check if term is otdated and if it is active if not make it inactive       
+
+
+
+def get_term(term_id):
+    if term_id in terms.keys():
+        return terms[term_id]
+def check_active_exsistence(term_id):
+    if term_id in terms.keys():
+        return terms[term_id].active
+    return False 
+#check if term is otdated and if it is active if not make it inactive       
 # ispitati sve ostale mogucnosti kad moze da se desi greska :D 

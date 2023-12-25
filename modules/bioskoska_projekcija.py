@@ -2,7 +2,7 @@ import modules.Film as Film
 import modules.Sala as Sala
 import modules.PrintTabel as PrintTabel
 import datetime
-from modules.Termin import effection
+from modules.Termin import effection , effection_change_code
 class Projection:
     def __init__(self, code, hall, start_time, end_time, dates,movie,price,active):
         self.code = code
@@ -55,17 +55,17 @@ def validate_input(name):
     if "|" in name:
         return False
     return True
-def validate_free_hall(hall, start_time,end_time,date):
+def validate_free_hall(hall, start_time,end_time,date,projection_change = None):
     for projection in projections.values():
-        print(projection.to_string())
-        if projection.hall == hall:
-            if any(i in projection.dates for i in date):
-                lower = start_time < projection.start_time
-                lower = end_time < projection.start_time and lower
-                bigger = start_time > projection.end_time
-                bigger = start_time > projection.end_time and bigger
-                if not (lower or bigger):
-                    return False 
+        if projection.active and projection != projection_change:
+            if projection.hall == hall:
+                if any(i in projection.dates for i in date):
+                    lower = start_time < projection.start_time
+                    lower = end_time < projection.start_time and lower
+                    bigger = start_time > projection.end_time
+                    bigger = start_time > projection.end_time and bigger
+                    if not (lower or bigger):
+                        return False 
     return True
 def validate_time(time):
     try:
@@ -231,7 +231,7 @@ def edit():
                 break
     time = datetime.datetime.strptime(time,'%H:%M:%S')
     end_time = time + datetime.timedelta(minutes=movie.lenght)
-    while not validate_free_hall(hall, time,end_time,date):
+    while not validate_free_hall(hall, time,end_time,date,projection):
             print("Sala je zauzeta u tom trenutku izaberite dal ce te da odustanete sa unosom X ili pokusate ponovo sa 3 promenom dana, 5 sa promenom vremena ili 2 promenom sale ")
             user = input("Unesi sledeci korak")
             if user == "3":
@@ -257,19 +257,24 @@ def edit():
                     if hall == "X":
                         hall = projection.hall
                         break
-    new_projection.hall = hall
-    new_projection.start_time = time
-    new_projection.end_time = end_time
-    new_projection.movie = movie
-    new_projection.dates = date 
-    new_projection.price = price
+            if user == "X":
+                return 
+    projection.hall = hall
+    projection.start_time = time
+    projection.end_time = end_time
+    projection.movie = movie
+    projection.dates = date 
+    projection.price = price
     print(projection.to_string())
     print(new_projection.to_string())
     if new_projection.to_string() != projection.to_string():
-        projection.active = False
-        effection(projection)
+        new_projection.active = False
         new_projection.code = str(new_key)
+        effection(projection)        
+        
+        effection_change_code(new_projection,projection.code)
         projections[str(new_key)] = new_projection
+        
 def effect(movie):
     for projection in projections:
         if projection.movie == movie:
@@ -280,7 +285,7 @@ def print_projections():
     for projection in projections.values(): 
         if projection.active:
             projection_for_print.append(projection.to_list())
-    PrintTabel.preper_to_print(projection_for_print)
+    PrintTabel.prepare_for_printing(projection_for_print)
 
 
 

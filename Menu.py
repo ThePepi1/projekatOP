@@ -3,6 +3,7 @@ import modules.Film as Film
 import modules.bioskoska_projekcija as bioskoska_projekcija
 import modules.Sala as Sala
 import modules.Termin as Termin
+import modules.cards as cards
 loged_user = None
 def create_menu():
     if loged_user == None:
@@ -12,6 +13,7 @@ def create_menu():
         print_menu_loged()
         return menu_loged
     if loged_user.type == 2:
+        print_menu_loged_seller()
         return menu_loged_seller
     if loged_user.type == 3:
         print_menu_loged_meneager()
@@ -25,12 +27,14 @@ def start():
     bioskoska_projekcija.load()
     Termin.load()
     Termin.generate_term()
+    cards.load()
 def Exit():
     Korisnik.save()
     Film.save()
     Sala.save()
     bioskoska_projekcija.save()
     Termin.save()
+    cards.save()
     return False 
 def login(): 
     global loged_user
@@ -102,9 +106,11 @@ def add_projection():
     return True
 def delete_projection():
     bioskoska_projekcija.delete()
+    Termin.generate_term()
     return True
 def edit_projection():
     bioskoska_projekcija.edit()
+    Termin.generate_term()
     return True
 def print_menu_not_loged():
     print("Ukucajte 1 ukoliko zelite da se prijavite")
@@ -121,8 +127,10 @@ def print_menu_loged():
     print("Ukucajte 4 ukoliko zelite da pretrazite dostupne filmove po 1 stavci")
     print("Ukucajte 5 ukoliko zelite da pretrazite filmoce po vise stavki")
     print("Ukucajte 6 ukoliko zelite da se izmenite podatke o nalogu")
+    print("Ukucajte 7 ukoliko zelite da rezervišete kartu ")
+    print("Ukucajte 8 ukoliko zelite da prikažete sve rezervisane karte ")
+    print("Ukucajte 9 ukoliko zelite da obrišete rezervisanu kartu ")
     print("Ukucajte X ukoliko zelite da izadjete iz aplikacije")
-    pass
 def print_menu_loged_meneager():
     print("Ukucajte 1 ukoliko zelite da se odjavite")
     print("Ukucajte 2 ukoliko zelite da pregledate dostupne termine")
@@ -139,9 +147,103 @@ def print_menu_loged_meneager():
     print("Ukucajte 13 ako zelite da obrisete projekciju")
     print("Ukucajte 14 ako zelite da izmenite projekciju")
     print("Ukucajte X ukoliko zelite da izadjete iz aplikacije")
+def print_menu_loged_seller():
+    print("Ukucajte 1 ukoliko zelite da se odjavite")
+    print("Ukucajte 2 ukoliko zelite da pregledate dostupne termine")
+    print("Ukucajte 3 ukoliko zelite da pretrazite dostupne filmova ")
+    print("Ukucajte 4 ukoliko zelite da pretrazite dostupne filmove po 1 stavci")
+    print("Ukucajte 5 ukoliko zelite da pretrazite filmoce po vise stavki")
+    print("Ukucajte 6 ukoliko zelite da se izmenite podatke o nalogu")
+    print("Ukucajte 7 ukoliko zelite da rezervišete kartu")
+    print("Ukucajte 8 ukoliko zelite da ostampate sve karte")
+    print("Ukucajte 9 ukoliko zelite da obrišete kartu")
+    print("Ukucajte 10 ukoliko zelite da prodate rezervisanu kartu ")
+    print("Ukucajte 11 ukoliko zelite da prodate ne rezervisanu kartu ")
+    print("Ukucajte X ukoliko zelite da izadjete")
 
+def reserve_card_for_self():
+    while True:
+        cards.reserve_card_for_self(loged_user)
+        user_iput = input("Ukoliko zelite da rezervisete jos jednu kartu ukucajte Da ")
+        if user_iput != "Da":
+            return True
+def register_card_for_registred():
+    data_username = Korisnik.print_all_users()
+    user_name =""
+    while not user_name in data_username:
+        user_name = input("Unesi korisnocko ime za kartu ")
+        if user_name == "X":
+            return 
+    return cards.reserve_card_for_self(user_name)
+def reserve_card_for_unregistered():
+    user_name = ""
+    while not Korisnik.check_every_input(user_name):
+        user_name = input("Unesi ime za koje prodaješ kartu ona ne sme da ima | i ne moze da bude prazan string ")
+    return cards.reserve_card_for_self(Korisnik.get_by_username(user_name))
+def reserve_card_for_someone():
+    while True:
+        user_input = input("Ukoliko želite da rezervišete kartu za registrovanog kupca ukucajte 1 a ukoliko zelite da rezervišete kartu za ne registrovanopg kupca ukucajte 2 ili za odustajanje X")
+        if user_input == '1':
+            register_card_for_registred()
+        elif user_input == '2':
+            reserve_card_for_unregistered()
+        elif user_input == 'X':
+            return True
+        else :
+            print("Losa naredba")
+            continue
+        user_iput = input("Ukoliko zelite da rezervisete jos jednu kartu ukucajte Da ")
+        if user_iput != "Da":
+            return True
+def print_all_cards():
+    cards.print_all_cards()
+    return True
+def print_my_cards():
+    cards.print_users_cards(loged_user)
+    return True
+def dell_reserved_cards():
+    while True:
+        cards_id = cards.print_reserved_cards(loged_user)
+        user_input = input("Unesi kod rezervacije koju brišeš ")
+        while not user_input in cards_id:
+            user_input = input("Unesi kod rezervacije koju brišeš ")
+            if user_input == "X":
+                return True
+        cards.delete_it(user_input)
+        continue_user = input("Ukucaj Da ako zeliš da obrišeš još neku kartu ")
+        if continue_user != "Da":
+            return True
+def dell_card():
+    while True:
+        cards_id = cards.print_all_cards()
+        user_input = input("Unesi kod rezervacije koju brišeš ")
+        while not user_input in cards_id:
+            user_input = input("Unesi kod rezervacije koju brišeš ")
+            if user_input == "X":
+                return True
+        cards.delete_it(user_input)
+        continue_user = input("Ukucaj Da ako zeliš da obrišeš još neku kartu ")
+        if continue_user != "Da":
+            return True
 
+def sell_reserved_card():
+    cards_id = cards.print_all_reserved_cards()
+    user_input = input("Unesi kod rezervacije koju prodaješ ")
+    while not user_input in cards_id:
+        user_input = input("Unesi kod rezervacije koju prodaješ ")
+        if user_input == "X":
+            return True
+    cards.sold_reserved(user_input,loged_user)
+    return True
+def sell_direct():
+    user_input = input("Ukoliko želite da prodate kartu za registrovanog kupca ukucajte 1 a ukoliko zelite da rezervišete kartu za ne registrovanopg kupca ukucajte 2 ")
+    if user_input == '1':
+        card = register_card_for_registred()
+    elif user_input == '2':
+        card = reserve_card_for_unregistered()
+    cards.sold_reserved(card.id,loged_user)
+    return True
 menu_not_loged = {"1" : login, "2": pregled_termina, "3":pregled_filma, "4":pretraga_filma1, "5": pretraga_filmova2, "6":registruj, "X": Exit}
-menu_loged= {"1" : logout, "2": pregled_termina, "3":pregled_filma, "4":pretraga_filma1, "5": pretraga_filmova2, "6":izmani_podatke, "X": Exit}
+menu_loged= {"1" : logout, "2": pregled_termina, "3":pregled_filma, "4":pretraga_filma1, "5": pretraga_filmova2, "6":izmani_podatke,"7":reserve_card_for_self, "8": print_my_cards,"9": dell_reserved_cards,  "X": Exit}
 menu_loged_meneager = {"1" : logout, "2": pregled_termina, "3":pregled_filma, "4":pretraga_filma1, "5": pretraga_filmova2, "6":izmani_podatke, "7": register_seller, "8": register_manager, "9":add_movie,  "11" : edit_movie, "10": delete_movie,"12":add_projection,"13":delete_projection, "14": edit_projection, "X": Exit}
-menu_loged_seller = {}
+menu_loged_seller = {"1" : logout, "2": pregled_termina, "3":pregled_filma, "4":pretraga_filma1, "5": pretraga_filmova2, "6":izmani_podatke,"7":reserve_card_for_someone,"8": print_all_cards,"9": dell_card,"10": sell_reserved_card,"11": sell_direct,"X": Exit}

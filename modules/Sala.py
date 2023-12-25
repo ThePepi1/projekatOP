@@ -99,6 +99,12 @@ def print_halls():
     for hall in halls.values():
         if hall.active:
             halls_for_print.append(hall.to_list())
-    PrintTabel.preper_to_print(halls_for_print)
-
-#poruke klijentu
+    PrintTabel.prepare_for_printing(halls_for_print)
+def generate_seats(hall):
+    all_seats = []
+    for i in range(hall.hall_number_row):
+        all_seats.append([])
+        for j in range(hall.hall_signe_seat):
+            all_seats[i].append(str(i + 1) + '/' +  create_seat(j+ 1))
+    return all_seats
+#poruke klijentu    
