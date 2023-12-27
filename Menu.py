@@ -4,6 +4,7 @@ import modules.bioskoska_projekcija as bioskoska_projekcija
 import modules.Sala as Sala
 import modules.Termin as Termin
 import modules.cards as cards
+import modules.reports as report
 loged_user = None
 def create_menu():
     if loged_user == None:

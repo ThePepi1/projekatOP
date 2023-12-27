@@ -47,7 +47,7 @@ def print_movies(movie_names = "", type = "", max_lenght="", min_lenght="", dire
         if(check_movie(movie,movie_names, type, max_lenght, min_lenght, directors, roles , year_of_recording, coutrys_of_origins) and movie.active): 
             movies_for_print.append(movie.to_list())
     if printing:           
-        PrintTabel.preper_to_print(movies_for_print)
+        PrintTabel.prepare_for_printing(movies_for_print)
     else:
         return movies_for_print
 def check_movie(movie, movie_names = "", type = "", max_lenght="", min_lenght="", directors="", roles = "", year_of_recording = "", coutrys_of_origins = ""):

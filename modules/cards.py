@@ -148,17 +148,36 @@ def change_card():
 
 
 def price_calc(term, user):
-    return term.projection.price
-
-
+    sum = 0
+    price = term.price
+    if datetime.datetime.weekday(term.date) == 1:
+        price = price - 50
+    for card in cards.values():
+        if isinstance(card.username, Korisnik.Korisnik):
+            if card.username == user:
+                if card.date > datetime.datetime.now() - datetime.timedelta(days=365):
+                    sum = sum + card.price
+    if sum >  5000:
+          price = price * 0.9
+    if datetime.datetime.weekday(term.date) == 6 or datetime.datetime.weekday(term.date) == 5:
+        price = price + 50
+    return price
 def sold_reserved(id,seller):
     cards[id].type = "2"
     cards[id].date = datetime.datetime.now()
     cards[id].price = price_calc(cards[id].term,cards[id].username )
     cards[id].seller = seller
 
+def search_cards(name= "", projection_code= "", date_term = "" , start_time_term = "",end_time_term ="",  sale_date = "", type = ""):
+    list_of_cards = []
+    list_for_print = []
+    for card in cards.values():
+        if check(card,name,projection_code, date_term, start_time_term, end_time_term,  sale_date, type):
+            list_of_cards.append(card)
+            list_for_print.append(card.to_list())
 
-    
+def check(card,name,projection_code, date_term, start_time_term, end_time_term, sale_date, type): 
+    pass
 
 
 
@@ -166,3 +185,21 @@ def sold_reserved(id,seller):
 
 
 
+
+
+
+
+
+
+
+def unreserve_cards():
+    list_of_codes_for_dell = []
+    for card in cards.values():
+        if datetime.datetime.now() - card.term.start_time() < datetime.timedelta(minutes=30):
+            print(card.id, card.type)
+            if card.type == "1":
+                list_of_codes_for_dell.append(card.id)
+    print(list_of_codes_for_dell)
+    for code in list_of_codes_for_dell:
+        cards.pop(code)
+    print(cards.values())
