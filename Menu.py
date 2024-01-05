@@ -147,6 +147,7 @@ def print_menu_loged_meneager():
     print("Ujucajte 12 ako zelite da dodate novu projekciju")
     print("Ukucajte 13 ako zelite da obrisete projekciju")
     print("Ukucajte 14 ako zelite da izmenite projekciju")
+    print("Ukucajte 15 ako zelite da vidite izvestaje")
     print("Ukucajte X ukoliko zelite da izadjete iz aplikacije")
 def print_menu_loged_seller():
     print("Ukucajte 1 ukoliko zelite da se odjavite")
@@ -160,6 +161,9 @@ def print_menu_loged_seller():
     print("Ukucajte 9 ukoliko zelite da obrišete kartu")
     print("Ukucajte 10 ukoliko zelite da prodate rezervisanu kartu ")
     print("Ukucajte 11 ukoliko zelite da prodate ne rezervisanu kartu ")
+    print("Ukucajte 12 ukoliko zelite da pretrazite kartu ")
+    print("Ukucajte 13 ukoliko zelite da izmenite karte ")
+    print("Ukucajte 14 ukoliko zelite da odrezervisite karte pola sata pre projekcije ")
     print("Ukucajte X ukoliko zelite da izadjete")
 
 def reserve_card_for_self():
@@ -180,7 +184,7 @@ def reserve_card_for_unregistered():
     user_name = ""
     while not Korisnik.check_every_input(user_name):
         user_name = input("Unesi ime za koje prodaješ kartu ona ne sme da ima | i ne moze da bude prazan string ")
-    return cards.reserve_card_for_self(Korisnik.get_by_username(user_name))
+    return cards.reserve_card_for_self(Korisnik.get_by_username(user_name,"False"))
 def reserve_card_for_someone():
     while True:
         user_input = input("Ukoliko želite da rezervišete kartu za registrovanog kupca ukucajte 1 a ukoliko zelite da rezervišete kartu za ne registrovanopg kupca ukucajte 2 ili za odustajanje X")
@@ -244,7 +248,19 @@ def sell_direct():
         card = reserve_card_for_unregistered()
     cards.sold_reserved(card.id,loged_user)
     return True
+def edit_cards():
+    cards.change_card()
+    return True
+def search_cards():
+    cards.search_cards()
+    return True
+def unreserve_cards():
+    cards.unreserve_cards()
+    return True
+def report_chose():
+    report.chose_report()
+    return True
 menu_not_loged = {"1" : login, "2": pregled_termina, "3":pregled_filma, "4":pretraga_filma1, "5": pretraga_filmova2, "6":registruj, "X": Exit}
 menu_loged= {"1" : logout, "2": pregled_termina, "3":pregled_filma, "4":pretraga_filma1, "5": pretraga_filmova2, "6":izmani_podatke,"7":reserve_card_for_self, "8": print_my_cards,"9": dell_reserved_cards,  "X": Exit}
-menu_loged_meneager = {"1" : logout, "2": pregled_termina, "3":pregled_filma, "4":pretraga_filma1, "5": pretraga_filmova2, "6":izmani_podatke, "7": register_seller, "8": register_manager, "9":add_movie,  "11" : edit_movie, "10": delete_movie,"12":add_projection,"13":delete_projection, "14": edit_projection, "X": Exit}
-menu_loged_seller = {"1" : logout, "2": pregled_termina, "3":pregled_filma, "4":pretraga_filma1, "5": pretraga_filmova2, "6":izmani_podatke,"7":reserve_card_for_someone,"8": print_all_cards,"9": dell_card,"10": sell_reserved_card,"11": sell_direct,"X": Exit}
+menu_loged_meneager = {"1" : logout, "2": pregled_termina, "3":pregled_filma, "4":pretraga_filma1, "5": pretraga_filmova2, "6":izmani_podatke, "7": register_seller, "8": register_manager, "9":add_movie,  "11" : edit_movie, "10": delete_movie,"12":add_projection,"13":delete_projection, "14": edit_projection,"15":report_chose,"X": Exit}
+menu_loged_seller = {"1" : logout, "2": pregled_termina, "3":pregled_filma, "4":pretraga_filma1, "5": pretraga_filmova2, "6":izmani_podatke,"7":reserve_card_for_someone,"8": print_all_cards,"9": dell_card,"10": sell_reserved_card,"11": sell_direct,"12":search_cards ,"13": edit_cards,"14": unreserve_cards,"X": Exit} 

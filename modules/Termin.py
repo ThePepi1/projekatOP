@@ -17,7 +17,7 @@ class Term:
     def start_time(self):
         return datetime.datetime.combine(self.date,self.projection.start_time.time())
     def end_time(self):
-        return datetime.datetime.combine(self.date,self.projection.start_time.time())
+        return datetime.datetime.combine(self.date,self.projection.start_time.time()) + datetime.timedelta(minutes= self.projection.movie.lenght) # radim ovo da bi dobio novi dan(posto cuvam end time a on je posle 24h pa ispada da je prvo poceo film pa se onda zavrsio)
 
 
 
@@ -97,7 +97,6 @@ def effection(projection):
     for code in terms_for_delete:
         effect_on_change(terms[code])
         terms.pop(code)
-        
 def effection_change_code(projection,code):
     for term in terms.values():
         if not term.active:
@@ -139,7 +138,6 @@ def search_terms():
             end_time = input("Unesi datum za koje zelite da pretrazite ")
         end_time = datetime.datetime.strptime(end_time,'%H:%M:%S')
     print_terms(movies,halls,date,start_time,end_time)
-
 def print_terms(movies = [], halls = "", date = "", start_time = "", end_time = ""): 
     terms_for_print = []
     for term in terms.values():
@@ -162,10 +160,6 @@ def print_terms(movies = [], halls = "", date = "", start_time = "", end_time = 
             terms_for_print.append(term.to_list())
             
     PrintTabel.prepare_for_printing(terms_for_print)
-
-
-
-
 def get_term(term_id):
     if term_id in terms.keys():
         return terms[term_id]
@@ -173,5 +167,3 @@ def check_active_exsistence(term_id):
     if term_id in terms.keys():
         return terms[term_id].active
     return False 
-#check if term is otdated and if it is active if not make it inactive       
-# ispitati sve ostale mogucnosti kad moze da se desi greska :D 

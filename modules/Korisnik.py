@@ -164,19 +164,22 @@ def save():
     for user in users:
         file.write(user.to_string())
     file.close()
-def get_by_username(username):
+def get_by_username(username, code = ""):
     if username == "None":
         return None
+    if code == "False":
+        return username
     for user in users:
         if user.username == username:
             return user
     return username
-def print_all_users():
+def print_all_users(type_of_user = 1,printing = True):
     data_for_print = []
     list_of_usernames = []
     for user in users:
-        if user.type == 1:
+        if user.type == type_of_user:
             data_for_print.append(user.to_list())
             list_of_usernames.append(user.username)
-    PrintTabel.prepare_for_printing(data_for_print)
+    if printing:
+       PrintTabel.prepare_for_printing(data_for_print)
     return list_of_usernames

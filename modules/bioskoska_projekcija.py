@@ -102,6 +102,7 @@ def add_projection():
     while not validate_code(code):
         code = input("unesi kod za projekciju ")
     hall_code = ""
+    Sala.print_halls()
     while not validate_hall(hall_code):
         hall_code = input("unesi kod sale ")
     hall = Sala.gethall(hall_code)
@@ -146,12 +147,16 @@ def get_by_day(date):
         if date in projection.dates:
             return_code.append(projection.code)
     return return_code
+def check_code(code):
+    return code in projections.keys()
+
 def get_by_day_active(date):
     return_code = []
     for projection in projections.values():
         if date in projection.dates and projection.active:
             return_code.append(projection.code)
     return return_code
+
 def delete():
     print_projections()
     user_input = ""
