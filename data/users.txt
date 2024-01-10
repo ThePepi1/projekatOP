@@ -3,3 +3,8 @@
 3|PetarM|Petar2004|Petar|Pavlovic|3
 4|Petar200|Petar205|Pavle|Pavlovic|2
 5|Petar3102|Petar205|Marko|Markovic|2
+6|PetarK|Petar2004|Peric|Perkovic|1
+7|mKupac|Petar2004|Marko|Markovic|1
+8|PavleK|Pavle|Pavle|Pavlovic|1
+9|Kupac123|Petar2004|Nikola|Nikolic|1
+10|Prodavac1|Prodavac1|Mirko|Mirkovic|2

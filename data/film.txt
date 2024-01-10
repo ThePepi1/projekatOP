@@ -1,3 +1,5 @@
 1|Gospodar Prstenova Družina prstena|Action|208|Piter Džekson|Elajdža Vud, Vigo Mortensen|America|2001|Da bi zaustavili zlo druzina mora da vrati prsten u lavu.|True
 2|Gospodar Prstenova Dve Kule|Adventure|225|Piter Džekson|Elajdža Vud, Vigo Mortensen|America|2002|Da bi zaustavili zlo druzina mora da vrati prsten u lavu.|True
 3|Avatar|Action, Adventure|162|James Cameron|James Cameron, Zoe Saldaña|America|2009|Avatar istrazivanje nove planete i susret sa cudesnom prirodom|True
+4|The Matrix|Action, Adventure|136|Lana Wachowski|Keanu Reeves, Carrie-Anne Moss|America|1999|Stranger leads computer hacker Neo to a forbidding underworld.|True
+5|IT|Horor|135|Andy Muschietti|Jaeden Martell, Jeremy Ray Taylor|England|2017|In the 1989, a group of bullied kids band together to destroy a monster.|True

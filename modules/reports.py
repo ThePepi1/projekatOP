@@ -61,11 +61,11 @@ def cars_sold_by_seller():
     code, name, date, start_time_first, start_time_second, end_time_first, end_time_second, type_card, sale_date, projection = cards.input_for_search(["7"])
     type_card = "2"
     card_ids = cards.print_cards(code, name, date, start_time_first, start_time_second, end_time_first, end_time_second, sale_date, type_card,printing= False)      
-    all_sellers = cards.Korisnik.print_all_users(type_of_user= 2)
+    all_sellers = cards.user.print_all_users(type_of_user= 2)
     saller = ""
     while saller not in all_sellers:
         saller = input("Unesi username prodavca ")
-    saller = cards.Korisnik.get_by_username(saller)
+    saller = cards.user.get_by_username(saller)
     list_for_print = []
     for card in card_ids:
         if card.seller == saller:
@@ -112,11 +112,11 @@ def sold_cards_in_week_day_projection():
     return printing_data
 def sold_card_for_movie():
     cards_ids = cards.print_cards(type="2",printing=False)
-    cards.Termin.bioskoska_projekcija.Film.print_movies()
+    cards.terms.projection.movie.print_movies()
     movie = ""
-    while not cards.Termin.bioskoska_projekcija.Film.check(movie):
+    while not cards.terms.projection.movie.check(movie):
         movie = input("Unesi ime filma")
-    movie = cards.Termin.bioskoska_projekcija.Film.get_movie(movie)
+    movie = cards.terms.projection.movie.get_movie(movie)
     printing_data = [[movie.name,"" , ""]]
     number = 0
     price = 0
@@ -132,11 +132,11 @@ def sold_cards_by_seller():
     code, name, date, start_time_first, start_time_second, end_time_first, end_time_second, type_card, sale_date, projection = cards.input_for_search(["7"])
     type_card = "2"
     card_ids = cards.print_cards(code, name, date, start_time_first, start_time_second, end_time_first, end_time_second, sale_date, type_card,printing= False)      
-    all_sellers = cards.Korisnik.print_all_users(type_of_user= 2)
+    all_sellers = cards.user.print_all_users(type_of_user= 2)
     saller = ""
     while saller not in all_sellers:
         saller = input("Unesi username prodavca ")
-    saller = cards.Korisnik.get_by_username(saller)
+    saller = cards.user.get_by_username(saller)
     list_for_print = [[saller.username,"",""]]
     number = 0
     price = 0
@@ -151,7 +151,7 @@ def sold_cards_by_seller():
 def sold_cards_by_all_sellers():
     type_card = "2"
     card_ids = cards.print_cards (type = type_card,printing= False)      
-    all_sellers = cards.Korisnik.print_all_users(type_of_user= 2, printing=False)
+    all_sellers = cards.user.print_all_users(type_of_user= 2, printing=False)
     price_seller = {}
     number_seller = {}
     for seller in all_sellers:

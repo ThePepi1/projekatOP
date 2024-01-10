@@ -1,4 +1,4 @@
-import modules.bioskoska_projekcija as bioskoska_projekcija
+import modules.projection as projection
 import datetime
 from random import randrange
 import modules.PrintTabel as PrintTabel
@@ -8,7 +8,7 @@ class Term:
     def __init__(self,code,date,active):
         self.code = code
         self.date = date
-        self.projection = bioskoska_projekcija.get_projection(code[:4])
+        self.projection = projection.get_projection(code[:4])
         self.active = active
     def to_string(self):
         return f"{self.code}|{self.date}|{self.active}\n"
@@ -32,7 +32,7 @@ def generate_term():
     day = datetime.datetime.now()
     day_date = day.date()
     for i in range(14):
-        list_of_codes = bioskoska_projekcija.get_by_day_active(dates[datetime.date.weekday(day_date)])  
+        list_of_codes = projection.get_by_day_active(dates[datetime.date.weekday(day_date)])  
         for code in list_of_codes:
             if not check_existence(code,day_date):
                 if not check_pass(code, day_date):
@@ -84,7 +84,7 @@ def check_active():
                 continue
 def check_pass(code, day):
     today = datetime.datetime.now()
-    start_time = bioskoska_projekcija.get_projection(code).start_time
+    start_time = projection.get_projection(code).start_time
     if today.date() == day:
         return start_time.time() < today.time() 
     return False
@@ -120,21 +120,21 @@ def search_terms():
     end_time = ""
     date = ""
     if '1' in user_input:
-        bioskoska_projekcija.Film.print_movies()
-        movies = bioskoska_projekcija.Film.pretraga_filmova(False)
+        projection.movie.print_movies()
+        movies = projection.movie.pretraga_filmova(False)
     elif '2' in user_input:
-        bioskoska_projekcija.Sala.print_halls()
+        projection.hall.print_halls()
         halls = input("Unesite sale za koje zelite da pretrazite termine ")
     elif '3' in user_input:
         while not validate_date(date):
             date = input("Unesi datum za koje zelite da pretrazite ")
         date = datetime.datetime.strptime(date,'%Y-%m-%d')
     elif '4' in user_input:
-        while not bioskoska_projekcija.validate_time(start_time):
+        while not projection.validate_time(start_time):
             start_time = input("Unesi datum za koje zelite da pretrazite ")
         start_time = datetime.datetime.strptime(start_time,'%H:%M:%S')
     elif '5' in user_input:
-        while not bioskoska_projekcija.validate_time(end_time):
+        while not projection.validate_time(end_time):
             end_time = input("Unesi datum za koje zelite da pretrazite ")
         end_time = datetime.datetime.strptime(end_time,'%H:%M:%S')
     print_terms(movies,halls,date,start_time,end_time)

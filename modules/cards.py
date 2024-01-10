@@ -1,5 +1,5 @@
-import modules.Korisnik as Korisnik
-import modules.Termin as Termin
+import modules.user as user
+import modules.terms as terms
 import modules.PrintTabel as PrintTabel 
 import datetime
 class Cards:
@@ -13,23 +13,23 @@ class Cards:
         self.date = date
         self.price = price
     def to_string(self):
-        if isinstance(self.username,Korisnik.Korisnik):
+        if isinstance(self.username,user.Korisnik):
             username = self.username.username
         else:
             username = self.username
-        if isinstance(self.seller,Korisnik.Korisnik):
+        if isinstance(self.seller,user.Korisnik):
             seller = self.seller.username
         else:
             seller = self.seller
         
-        if isinstance(self.term,Termin.Term):
+        if isinstance(self.term,terms.Term):
            term = self.term.code
         else:
             term = self.term
 
-        return f"{self.id}|{username}|{term}|{self.seat}|{self.type}|{seller}|{self.date.strftime('%Y-%m-%d %H:%M:%S')}|{self.price}|{isinstance(self.username,Korisnik.Korisnik)}\n"
+        return f"{self.id}|{username}|{term}|{self.seat}|{self.type}|{seller}|{self.date.strftime('%Y-%m-%d %H:%M:%S')}|{self.price}|{isinstance(self.username,user.Korisnik)}\n"
     def to_list(self):
-        if isinstance(self.username,Korisnik.Korisnik):
+        if isinstance(self.username,user.Korisnik):
             username = self.username.username
         else:
             username = self.username
@@ -46,7 +46,7 @@ class Cards:
         self.username = username
 cards =  {}
 def get_empty_seats(term_user):
-    seats = Termin.bioskoska_projekcija.Sala.generate_seats(term_user.projection.hall)
+    seats = terms.projection.hall.generate_seats(term_user.projection.hall)
     for card in cards.values():
         if card.term == term_user:
             for row in seats:
@@ -65,20 +65,20 @@ def check_seat(seat, available_cards):
 
 def reserve_card_for_self(user):
     who = user
-    Termin.print_terms()
+    terms.print_terms()
     term_user = input("Unesi zeljeni id termina: ")
-    while not Termin.check_active_exsistence(term_user):
+    while not terms.check_active_exsistence(term_user):
         term_user = input("Unesi id zeljene projekcije")
         if term_user == "X":
-            return
-    term_user = Termin.get_term(term_user)
+            return None
+    term_user = terms.get_term(term_user)
     available_cards = get_empty_seats(term_user)
     PrintTabel.prepare_for_printing(available_cards)
     seat = " "
     while not check_seat(seat, available_cards):
         seat = input("Unesi zeljeno sediste: ")
         if seat == "X":
-            return
+            return None
     id = 1
     if len(cards) != 0:
         while str(id) in cards.keys():
@@ -91,7 +91,7 @@ def load():
         if line != "":
             line = line[:-1]
             line = line.split("|")
-            cards[line[0]] = Cards(line[0],Korisnik.get_by_username(line[1],line[8]),Termin.get_term(line[2]),line[3],line[4],Korisnik.get_by_username(line[5],""),datetime.datetime.strptime(line[6],'%Y-%m-%d %H:%M:%S'),int(line[7]))
+            cards[line[0]] = Cards(line[0],user.get_by_username(line[1],line[8]),terms.get_term(line[2]),line[3],line[4],user.get_by_username(line[5],""),datetime.datetime.strptime(line[6],'%Y-%m-%d %H:%M:%S'),int(line[7]))
     file.close() 
 def save():
     file = open("data\\cards.txt","w",encoding="utf-8")
@@ -145,21 +145,21 @@ def change_card():
         print("Ukoliko zelis da prekines ukucaj X")
         user_input = input("Unesi broj ")
         if user_input == "1":
-            Termin.print_terms()
+            terms.print_terms()
             term_user = input("Unesi zeljeni id termina: ")
-            while not Termin.check_active_exsistence(term_user):
+            while not terms.check_active_exsistence(term_user):
                 term_user = input("Unesi id zeljene projekcije")
                 if term_user == "X":
                     break
             if term_user != "X":
-                cards[card_id].set_term(Termin.get_term(term_user))
+                cards[card_id].set_term(terms.get_term(term_user))
                 user_input = "3"
          
         if user_input == "2":
             print("Ukoliko zelite da promenite u registrovanog korisnika ukucajte 1, ako ocete da promenite u neregistrovanog ukucajte 2")
             user_type = input("Vrsta: ")
             if user_type == "1":
-                data_username = Korisnik.print_all_users()
+                data_username = user.print_all_users()
             user_name =""
             while True:
                 user_name = input("Unesi korisnocko ime za kartu ")
@@ -167,10 +167,10 @@ def change_card():
                     break
                 if user_type == "1":
                     if user_name in  data_username:
-                        user_name = Korisnik.get_by_username(user_name)
+                        user_name = user.get_by_username(user_name)
                         break
                 elif user_type == "2":
-                    if Korisnik.check_every_input(user_name):
+                    if user.check_every_input(user_name):
                         break
             if user_name != "X": 
                 cards[card_id].set_username(user_name)
@@ -187,21 +187,21 @@ def change_card():
                 cards[card_id].set_seat(seat)
         if user_input == "X":
             return 
-def price_calc(term, user):
+def price_calc(term, user_name):
     sum = 0
     price = term.projection.price
     if datetime.datetime.weekday(term.date) == 1:
         price = price - 50
     for card in cards.values():
-        if isinstance(card.username, Korisnik.Korisnik):
-            if card.username == user:
+        if isinstance(card.username, user.Korisnik):
+            if card.username == user_name:
                 if card.date > datetime.datetime.now() - datetime.timedelta(days=365):
                     sum = sum + card.price
     if sum >  5000:
           price = price * 0.9
     if datetime.datetime.weekday(term.date) == 6 or datetime.datetime.weekday(term.date) == 5:
         price = price + 50
-    return price
+    return int(price)
 def sold_reserved(id,seller):
     cards[id].type = "2"
     cards[id].date = datetime.datetime.now()
@@ -277,7 +277,7 @@ def search_cards(printing = True):
 def input_for_search(user_input):
     code = ""
     if "1" in user_input:
-        Termin.bioskoska_projekcija.print_projections()
+        terms.projection.print_projections()
         code = input("Unesi kod projekcije po kojoj pretražuješ ")    
     name = ""
     if "2" in user_input:
@@ -285,10 +285,10 @@ def input_for_search(user_input):
         is_it_looged = input("Unesi 1 ako ovo nije logovan kupac ")
         if is_it_looged == "1":
             is_it_looged = "False"
-        name = Korisnik.get_by_username(name,is_it_looged)
+        name = user.get_by_username(name,is_it_looged)
     date = ""
     if "3" in user_input:
-        while not Termin.validate_date(date):
+        while not terms.validate_date(date):
             date = input("Unesi datum: ")    
         date = datetime.datetime.strptime(date,'%Y-%m-%d').date()
     start_time_first = ""
@@ -304,16 +304,16 @@ def input_for_search(user_input):
         type_card = input("Unesi 1 ukoliko zelis da pretrazis rezervisane karte, 2 ukoliko zelite da pretrazite prodate karte ")
     sale_date = ""
     if "7" in user_input:
-        while not Termin.validate_date(sale_date):
+        while not terms.validate_date(sale_date):
             sale_date = input("Unesi datum: ")    
         sale_date = datetime.datetime.strptime(sale_date,'%Y-%m-%d').date()
     projection_code = ""
     projection = ""
     if "8" in user_input:
-        Termin.bioskoska_projekcija.print_projections()
-        while not Termin.bioskoska_projekcija.check_code(projection_code):
+        terms.projection.print_projections()
+        while not terms.projection.check_code(projection_code):
             projection_code = input("unesi kod projekcije ")
-        projection = Termin.bioskoska_projekcija.get_projection(projection_code)
+        projection = terms.projection.get_projection(projection_code)
     return code, name, date, start_time_first, start_time_second, end_time_first, end_time_second, type_card, sale_date, projection
 def input_time():
     time_first = ""
@@ -324,15 +324,15 @@ def input_time():
     print("Ukoliko zelite da pretrazite sve termine koji po dva vremena ukucajte 4")
     user_input = input()
     if user_input == "2" or user_input == "4":
-        while not Termin.bioskoska_projekcija.validate_time(time_first):
+        while not terms.projection.validate_time(time_first):
             time_first = input("Unesi vreme ")
         time_first = datetime.datetime.strptime(time_first,'%H:%M:%S').time()
     if user_input == "1" or user_input == "4":
-        while not Termin.bioskoska_projekcija.validate_time(time_second):
+        while not terms.projection.validate_time(time_second):
             time_second = input("Unesi vreme ")
         time_second = datetime.datetime.strptime(time_second,'%H:%M:%S').time()
     if user_input == "3":
-        while not Termin.bioskoska_projekcija.validate_time(time_first):
+        while not terms.projection.validate_time(time_first):
             time_first = input("Unesi vreme ")
         time_first = datetime.datetime.strptime(time_first,'%H:%M:%S').time()
         return time_first, time_first
@@ -341,7 +341,7 @@ def input_time():
 def unreserve_cards():
     list_of_codes_for_dell = []
     for card in cards.values():
-        if datetime.datetime.now() - card.term.start_time() < datetime.timedelta(minutes=30):
+        if datetime.datetime.now() - datetime.timedelta(minutes=30) > card.term.start_time():
             if card.type == "1":
                 list_of_codes_for_dell.append(card.id)
     for code in list_of_codes_for_dell:

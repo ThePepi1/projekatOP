@@ -1,8 +1,8 @@
-import modules.Film as Film
-import modules.Sala as Sala
+import modules.movie as movie
+import modules.hall as hall
 import modules.PrintTabel as PrintTabel
 import datetime
-from modules.Termin import effection , effection_change_code
+from modules.terms import effection , effection_change_code
 class Projection:
     def __init__(self, code, hall, start_time, end_time, dates,movie,price,active):
         self.code = code
@@ -32,7 +32,7 @@ projections = {}
 
 def validate_date(date_Projections):
     dates = ['pon','uto','sre','cet','pet','sub','ned']
-    
+    print("Dani se oznacavaju sa pon, uto, sre, cet, pet, sub, ned, i moraju biti odvojeni razmakom")
     if date_Projections == "":
         return False
     for i in date_Projections:
@@ -42,12 +42,15 @@ def validate_date(date_Projections):
             return False 
     return True
 def validate_code(code):
-    if code in projections:
+    if code in projections.keys():
+        print("Kod je vec zauzet")
         return False
     if  not validate_input(code):
+        print("Kod ne sme da sadrzi | i razmake")
         return False
     if len(code) == 4:
         return True
+    print("Kod mora da bude duzine 4")
     return False
 def validate_input(name):
     if name == "":
@@ -74,19 +77,19 @@ def validate_time(time):
     except:
         print("Vreme mora da bude u formatu sati:minuti:sekunde")
         return False
-def validate_hall(hall):
-    return Sala.check(hall)
+def validate_hall(hall_code):
+    return hall.check(hall_code)
 def validate_number(number):
     return number.isdigit() 
-def validate_movie(movie):
-    return Film.check(movie)
+def validate_movie(movie_id):
+    return movie.check(movie_id)
 def load():
     file = open("data\\bioskopske_projekcije.txt","r",encoding="utf-8")
     for line in file:
         if line != "":
             line = line[:-1]
             line = line.split("|")
-            projections[line[0]] = Projection(line[0],Sala.gethall(line[1]),datetime.datetime.strptime(line[2],"%H:%M:%S"),datetime.datetime.strptime(line[3], "%H:%M:%S") ,line[4].split(","),Film.get_movie(line[5]),line[6],line[7] == "True")
+            projections[line[0]] = Projection(line[0],hall.gethall(line[1]),datetime.datetime.strptime(line[2],"%H:%M:%S"),datetime.datetime.strptime(line[3], "%H:%M:%S") ,line[4].split(","),movie.get_movie(line[5]),line[6],line[7] == "True")
             projections[line[0]].active = projections[line[0]].movie.active and projections[line[0]].hall.active and projections[line[0]].active
     file.close() 
 def save():
@@ -99,24 +102,33 @@ def save():
     file.close()
 def add_projection():
     code = ""
+    print("Ukoliko u bilo kom trenutku zelita da prestanete sa ovom radnjom ukucajte X")
     while not validate_code(code):
         code = input("unesi kod za projekciju ")
+        if code == "X":
+            return
     hall_code = ""
-    Sala.print_halls()
+    hall.print_halls()
     while not validate_hall(hall_code):
         hall_code = input("unesi kod sale ")
-    hall = Sala.gethall(hall_code)
+        if hall_code == "X":
+            return
+    hall_code = hall.gethall(hall_code)
     start_time = ""
     end_time = ""
     date = ""
     while not validate_date(date):
         date = input("Unesi dane kojima se film prikazuje ")
-        date = date.split(",")
-    movie = ""
-    while(not validate_movie(movie)):
-        Film.print_movies()
-        movie = input("Unesi id filma ")
-    movie = Film.get_movie(movie)
+        if date == "X":
+            return
+        date = date.split(" ")
+    movie_id = ""
+    while(not validate_movie(movie_id)):
+        movie.print_movies()
+        movie_id = input("Unesi id filma ")
+        if movie_id == "X":
+            return
+    movie_id = movie.get_movie(movie_id)
     good_time = False
     free_hall = False
     while not (good_time and free_hall):
@@ -125,7 +137,7 @@ def add_projection():
             return
         if validate_time(start_time):
             start_time = datetime.datetime.strptime(start_time,'%H:%M:%S')
-            end_time = start_time + datetime.timedelta(minutes=movie.lenght)
+            end_time = start_time + datetime.timedelta(minutes=movie_id.lenght)
             good_time = True
         if good_time:
             if validate_free_hall(hall,start_time,end_time,date):
@@ -138,7 +150,7 @@ def add_projection():
         price = input("Unesi cenu kao broj ")
         if price == "X":
             return 
-    projections[code] = Projection(code,hall,start_time,end_time,date,movie,price,True)
+    projections[code] = Projection(code,hall_code,start_time,end_time,date,movie_id,price,True)
 def get_projection(code):
     return projections[code]
 def get_by_day(date):
@@ -197,21 +209,21 @@ def edit():
     if "1" in user_input:
         movie = ""
         while not validate_movie(movie):
-            Film.print_movies()
+            movie.print_movies()
             movie = input("Unesite film ")
             if movie == "X":
                 movie = projection.movie.id
                 break
-        movie = Film.get_movie(movie)
+        movie = movie.get_movie(movie)
     if "2" in user_input:
         hall = ""
         while not validate_hall(hall):
-            Sala.print_halls()
+            hall.print_halls()
             hall = input("Unesi kod sale ")
             if hall == "X":
                 hall = projection.hall.code
                 break
-        hall = Sala.gethall(hall)
+        hall = hall.gethall(hall)
     if "3" in user_input:
         date = ""
         while not validate_date(date):
@@ -257,7 +269,7 @@ def edit():
             if user == "2":
                 hall = ""
                 while not validate_hall(hall):
-                    Sala.print_halls()
+                    hall.print_halls()
                     hall = input("Unesi kod sale ")
                     if hall == "X":
                         hall = projection.hall

@@ -1,2 +1,3 @@
 A1|Velika sala|10|2|True
 A2|Mala Sala|5|12|True
+A3|Ogromna Sala|30|30|True

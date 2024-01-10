@@ -1,5 +1,5 @@
 import modules.PrintTabel as PrintTabel 
-from modules.bioskoska_projekcija import effect
+from modules.projection import effect
 types_of_movies = ["Horor", "Action", "Adventure", "Romance", "Comedy"]
 class Movie:
     def __init__(self,id, name, type, length, director, roles, countyr_of_origin,year,description,active):
@@ -75,7 +75,7 @@ def check_one(movie, tester):
     testing_data = movie.split(", ")
     if "" in tester:
         tester.remove("")
-    if tester and not all(i in tester for i in testing_data):
+    if tester and not any(i in tester for i in testing_data):
         return False
     return True
 def save():
@@ -185,7 +185,7 @@ def add_movie():
     type = ""
     while not validate_type(type):
         type = input("Unesi zanr filma od postojecih zanrova ukoliko postoje vise razdvojite ih zarezom i razmakom ")
-        if name == "X":
+        if type == "X":
             return 
     length = ""
     while not validate_number(length):
