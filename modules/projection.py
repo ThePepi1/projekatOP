@@ -293,7 +293,7 @@ def edit():
         projections[str(new_key)] = new_projection
         
 def effect(movie):
-    for projection in projections:
+    for projection in projections.values():
         if projection.movie == movie:
             projection.active = False
             effection(projection)
