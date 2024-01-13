@@ -143,9 +143,9 @@ def print_terms(movies = [], halls = "", date = "", start_time = "", end_time = 
     for term in terms.values():
         if term.active:
             if not movies == []:
-                if not term.projection.movie in movies:
+                if not term.projection.movie.to_list() in movies:
                     continue
-            if not halls == "":
+            if not halls == "": 
                 if not term.projection.hall.hall_code == halls:
                     continue
             if not date == "":

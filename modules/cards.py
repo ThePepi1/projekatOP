@@ -68,7 +68,8 @@ def reserve_card_for_self(user):
     terms.print_terms()
     term_user = input("Unesi zeljeni id termina: ")
     while not terms.check_active_exsistence(term_user):
-        term_user = input("Unesi id zeljene projekcije")
+        print("Termin ne postoji ukoliko zelite da izadjete ukucajte X ili pokusajte da ukucate jos jedan termin")
+        term_user = input("Unesi id zeljenog termina ")
         if term_user == "X":
             return None
     term_user = terms.get_term(term_user)
