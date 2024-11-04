@@ -42,7 +42,7 @@ class Movie:
 movies = {}
 
 def print_movies(movie_names = "", type = "", max_lenght="", min_lenght="", directors="", roles = "", year_of_recording = "", coutrys_of_origins = "",printing = True): 
-    movies_for_print = []
+    movies_for_print = [["ID", "Ime", "Tip", "Duzina","Reziser","Uloge","Zemlja Porekla", "Godina","Opis"]]
     for movie in movies.values():
         if(check_movie(movie,movie_names, type, max_lenght, min_lenght, directors, roles , year_of_recording, coutrys_of_origins) and movie.active): 
             movies_for_print.append(movie.to_list())

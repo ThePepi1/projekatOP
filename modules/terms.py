@@ -139,7 +139,7 @@ def search_terms():
         end_time = datetime.datetime.strptime(end_time,'%H:%M:%S')
     print_terms(movies,halls,date,start_time,end_time)
 def print_terms(movies = [], halls = "", date = "", start_time = "", end_time = ""): 
-    terms_for_print = []
+    terms_for_print = [["Sifra","Sala","Film","Datum","Poceak","Kraj"]]
     for term in terms.values():
         if term.active:
             if not movies == []:

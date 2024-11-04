@@ -115,7 +115,7 @@ def sold_card_for_movie():
     cards.terms.projection.movie.print_movies()
     movie = ""
     while not cards.terms.projection.movie.check(movie):
-        movie = input("Unesi ime filma")
+        movie = input("Unesi id filma")
     movie = cards.terms.projection.movie.get_movie(movie)
     printing_data = [[movie.name,"" , ""]]
     number = 0

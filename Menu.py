@@ -29,6 +29,7 @@ def start():
     terms.load()
     terms.generate_term()
     cards.load()
+    return True
 def Exit():
     user.save()
     movie.save()
@@ -272,6 +273,7 @@ def unreserve_cards():
 def report_chose():
     report.chose_report()
     return True
+
 menu_not_loged = {"1" : login, "2": pregled_termina, "3":pregled_filma, "4":pretraga_filma1, "5": pretraga_filmova2, "6":registruj, "X": Exit}
 menu_loged= {"1" : logout, "2": pregled_termina, "3":pregled_filma, "4":pretraga_filma1, "5": pretraga_filmova2, "6":izmani_podatke,"7":reserve_card_for_self, "8": print_my_cards,"9": dell_reserved_cards,  "X": Exit}
 menu_loged_meneager = {"1" : logout, "2": pregled_termina, "3":pregled_filma, "4":pretraga_filma1, "5": pretraga_filmova2, "6":izmani_podatke, "7": register_seller, "8": register_manager, "9":add_movie,  "11" : edit_movie, "10": delete_movie,"12":add_projection,"13":delete_projection, "14": edit_projection,"15":report_chose,"X": Exit}

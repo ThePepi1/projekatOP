@@ -79,7 +79,7 @@ def register(Type = 1):
             break
     name =""
     while True:
-        name = input("Unesite vase ime bez znaka | ")
+        name = input("Unesite ime bez znaka | ")
         if name == "X":
             return
         if check_every_input(name):
@@ -87,7 +87,7 @@ def register(Type = 1):
     
     lastname = ""
     while True:
-        lastname = input("Unesite vase prezime bez znaka | ")
+        lastname = input("Unesite prezime bez znaka | ")
         if lastname == "X":
             return 
         if check_every_input(lastname):

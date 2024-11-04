@@ -9,7 +9,10 @@ if __name__ == "__main__":
         menu = Menu.create_menu()
         user_input = input("Unesi naredbu ")
         if user_input in menu.keys():
-            Next = menu[user_input]()
+            try:
+                Next = menu[user_input]()
+            except:
+                print("Neocekivana greska")
         else:
             print("Nepostojeca naredba")
            
